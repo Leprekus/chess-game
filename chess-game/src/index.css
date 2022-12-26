@@ -86,3 +86,20 @@ button:focus-visible {
   height: 100px;
   text-align: center;
 }
+
+.piece {
+  width: 100px;
+  height: 100px;
+  background-image: url('./assets/black_pawn.png');
+  background-size: contain;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  z-index: -1;
+}
+
+.active {
+  background-color: bisque !important;
+}

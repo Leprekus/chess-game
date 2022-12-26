@@ -1,20 +1,34 @@
-import { useRef } from 'react'
+import { useRef, useMemo, useState } from 'react'
+import Draggable from 'react-draggable'
 import reactLogo from './assets/react.svg'
 import './App.css'
-
+import Pawn from './components/Pawn'
 function App() {
-  const testRef = useRef(null)
-  const board = [
+  const [updateBoard, setUpdateBoard] = useState(false)
+  const [board, setBoard] = useState([
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+    [{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false},{className: false}],
+  ])
+  useMemo(() => {
+      if(updateBoard) {
+        setUpdateBoard(!updateBoard)
+      }
 
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-      [1,2,3,4,5,6,7,8],
-  ]
+  }, [updateBoard])
+  const showMoves = () => {
+    setBoard((prevState) => {
+      prevState[2 + 1][5].className = 'active'
+      prevState[2 + 2][5].className = 'active'
+      return prevState
+    })
+    setUpdateBoard(!updateBoard)
+ }
   // moves 
   // pawn = board[0 + 1][0] || board[0 + 2][0]
   // tower = {
@@ -35,19 +49,23 @@ function App() {
   const coords = ['a','b','c','d','e','f','g','h']
   return (
     <div className="App">
-    <div className="board" onMouseOver={getMouseCoords}>
+    <div className="board">
       {
         board.map((row, x) =>
         <div key={x} className='row'>{
+
           row.map((tile, y) =>
-          <span key={`${coords[x]}-${y}`} style={{ backgroundColor: (x + y) % 2 === 0 ? 'tomato' : 'black' }} className='tile'>
-            { ` ${coords[x]}${y} ` }
+          <span key={`${coords[x]}-${y}`} style={{ backgroundColor: (x + y) % 2 === 0 ? 'tomato' : 'black' }} className={`tile ${board[x][y].className}`} onClick={showMoves}>
+            { `${coords[x]}${y}` === 'b4' ? <Pawn board={board} posX={x} posY={y} setBoard={setBoard}/> : ` ${coords[x]}${y} ` }
           </span>)
+
         }</div>)
       
       }
     </div>
-    <div style={{backgroundColor: 'red', position: 'absolute', width: 200, height: 200}} ref={testRef} id='test'>test</div>
+    <Draggable>
+      <div style={{backgroundColor: 'red', position: 'absolute', width: 200, height: 200}} id='test'>test</div>
+    </Draggable>
     </div>
   )
 }
